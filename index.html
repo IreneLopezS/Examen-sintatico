@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico y Sintáctico</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Analizador Léxico y Sintáctico</h1>
+    <form method="POST">
+        <textarea name="code" rows="10" cols="50" placeholder="Introduce el código aquí...">{{ request.form.get('code', '') }}</textarea><br>
+        <input type="submit" value="Analizar">
+    </form>
+
+    {% if tokens_details %}
+    <h2>Tabla de Tokens:</h2>
+    <table>
+        <tr>
+            <th>Token</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+        </tr>
+        {% for token, tipo, cantidad in tokens_details %}
+        <tr>
+            <td>{{ token }}</td>
+            <td>{{ tipo }}</td>
+            <td>{{ cantidad }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Conteo Total de Tokens:</h2>
+    <table>
+        <tr>
+            <th>Tipo de Token</th>
+            <th>Cantidad</th>
+        </tr>
+        <tr>
+            <td>Palabras reservadas</td>
+            <td>{{ token_counts.get('Palabras reservadas', 0) }}</td>
+        </tr>
+        <tr>
+            <td>Identificadores</td>
+            <td>{{ token_counts.get('Identificadores', 0) }}</td>
+        </tr>
+        <tr>
+            <td>Identificadores/Archivo</td>
+            <td>{{ token_counts.get('Identificadores/Archivo', 0) }}</td>
+        </tr>
+        <tr>
+            <td>Literales</td>
+            <td>{{ token_counts.get('Literales', 0) }}</td>
+        </tr>
+        <tr>
+            <td>Símbolos</td>
+            <td>{{ token_counts.get('Símbolos', 0) }}</td>
+        </tr>
+    </table>
+
+    <h2>Validez Sintáctica:</h2>
+    <p>{{ "El código es válido" if is_valid else "El código no es válido" }}</p>
+    {% if error_message %}
+        <h2 style="color: red;">Error:</h2>
+        <p>{{ error_message }}</p>
+    {% endif %}
+    {% endif %}
+</body>
+</html>
